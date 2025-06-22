@@ -129,8 +129,36 @@ return {
                 vim.diagnostic.config { signs = { text = diagnostic_signs } }
             end
 
+            local util = require("lspconfig/util")
             local servers = {
-                pyright = {},
+                pyright = {
+                    -- Exactly what you had before: always point at your ~/virtualenvs/nvim-venv/bin/python
+                    before_init = function(_, config)
+                        local default_venv = util.path.join(
+                            vim.env.HOME,
+                            "virtualenvs",
+                            "nvim-venv",
+                            "bin",
+                            "python"
+                        )
+                        config.settings = config.settings or {}
+                        config.settings.python = config.settings.python or {}
+                        config.settings.python.pythonPath = default_venv
+                    end,
+                    settings = {
+                        python = {
+                            analysis = {
+                                diagnosticMode              = "workspace", -- or "openFilesOnly"
+                                autoSearchPaths             = true,
+                                useLibraryCodeForTypes      = true,
+                                diagnosticSeverityOverrides = {
+                                    reportUnusedImport   = "warning",
+                                    reportUnusedVariable = "warning",
+                                },
+                            }
+                        }
+                    },
+                },
                 eslint = {},
                 gopls = {
                     settings = {
@@ -143,39 +171,38 @@ return {
                     },
                 },
                 rust_analyzer = {},
-                -- tsserver = {
-                --     settings = {
-                --         typescript = {
-                --             tsserver = {
-                --                 useSyntaxServer = false,
-                --             },
-                --             inlayHints = {
-                --                 includeInlayParameterNameHints = 'all',
-                --                 includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                --                 includeInlayFunctionParameterTypeHints = true,
-                --                 includeInlayVariableTypeHints = true,
-                --                 includeInlayVariableTypeHintsWhenTypeMatchesName = true,
-                --                 includeInlayPropertyDeclarationTypeHints = true,
-                --                 includeInlayFunctionLikeReturnTypeHints = true,
-                --                 includeInlayEnumMemberValueHints = true,
-                --             },
-                --         },
-                --
-                --         javascript = {
-                --             inlayHints = {
-                --                 includeInlayParameterNameHints = 'all',
-                --                 includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                --                 includeInlayFunctionParameterTypeHints = true,
-                --                 includeInlayVariableTypeHints = true,
-                --                 includeInlayVariableTypeHIntsWhenTypeMatchesName = true,
-                --                 includeInlayPropertyDeclarationTypeHints = true,
-                --                 includeInlayFunctionLikeReturnTypeHints = true,
-                --                 includeInlayEnumMemberValueHints = true,
-                --             },
-                --         },
-                --     },
-                -- },
+                ts_ls = {
+                    settings = {
+                        typescript = {
+                            tsserver = {
+                                useSyntaxServer = false,
+                            },
+                            inlayHints = {
+                                includeInlayParameterNameHints = 'all',
+                                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                                includeInlayFunctionParameterTypeHints = true,
+                                includeInlayVariableTypeHints = true,
+                                includeInlayVariableTypeHIntsWhenTypeMatchesName = true,
+                                includeInlayPropertyDeclarationTypeHints = true,
+                                includeInlayFunctionLikeReturnTypeHints = true,
+                                includeInlayEnumMemberValueHints = true,
+                            },
+                        },
 
+                        javascript = {
+                            inlayHints = {
+                                includeInlayParameterNameHints = 'all',
+                                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+                                includeInlayFunctionParameterTypeHints = true,
+                                includeInlayVariableTypeHints = true,
+                                includeInlayVariableTypeHIntsWhenTypeMatchesName = true,
+                                includeInlayPropertyDeclarationTypeHints = true,
+                                includeInlayFunctionLikeReturnTypeHints = true,
+                                includeInlayEnumMemberValueHints = true,
+                            },
+                        },
+                    },
+                },
                 tailwindcss = {
                     settings = {
                         tailwindCSS = {
