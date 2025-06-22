@@ -132,7 +132,16 @@ return {
             local servers = {
                 pyright = {},
                 eslint = {},
-                gopls = {},
+                gopls = {
+                    settings = {
+                        gopls = {
+                            completeUnimported = true,
+                            analyses = { unusedparams = true },
+                            usePlaceholders = true,
+                            staticcheck = true,
+                        },
+                    },
+                },
                 rust_analyzer = {},
                 -- tsserver = {
                 --     settings = {
