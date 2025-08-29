@@ -22,7 +22,6 @@ return {
                             'gofumpt',       -- Go formatter
                             'goimports',     -- Go import organizer
                             'golangci-lint', -- Go linter
-                            'rustfmt',       -- Rust formatter
                             'codelldb',      -- Rust debugger
                             'black',         -- Python formatter
                             'flake8',        -- Python linter
@@ -123,82 +122,9 @@ return {
             -- LSP server definitions
             local util = require('lspconfig/util')
             local servers = {
-                pyright = {
-                    before_init = function(_, cfg)
-                        cfg.settings = cfg.settings or {}
-                        cfg.settings.python = cfg.settings.python or {}
-                        cfg.settings.python.pythonPath = util.path.join(
-                            vim.env.HOME, 'virtualenvs', 'nvim-venv', 'bin', 'python'
-                        )
-                    end,
-                    settings = {
-                        python = {
-                            analysis = {
-                                diagnosticMode = 'workspace',
-                                autoSearchPaths = true,
-                                useLibraryCodeForTypes = true,
-                                diagnosticSeverityOverrides = {
-                                    reportUnusedImport   = 'warning',
-                                    reportUnusedVariable = 'warning',
-                                },
-                            },
-                        },
-                    },
-                },
-                eslint = {},
-                gopls = {
-                    settings = {
-                        gopls = {
-                            completeUnimported = true,
-                            analyses = { unusedparams = true },
-                            usePlaceholders = true,
-                            staticcheck = true,
-                        },
-                    },
-                },
                 rust_analyzer = {},
-                ts_ls = {
-                    settings = {
-                        typescript = {
-                            tsserver = { useSyntaxServer = false },
-                            inlayHints = {
-                                includeInlayParameterNameHints = 'all',
-                                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                                includeInlayFunctionParameterTypeHints = true,
-                                includeInlayVariableTypeHints = true,
-                                includeInlayPropertyDeclarationTypeHints = true,
-                                includeInlayFunctionLikeReturnTypeHints = true,
-                                includeInlayEnumMemberValueHints = true,
-                            },
-                        },
-                        javascript = {
-                            inlayHints = {
-                                includeInlayParameterNameHints = 'all',
-                                includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-                                includeInlayFunctionParameterTypeHints = true,
-                                includeInlayVariableTypeHints = true,
-                                includeInlayPropertyDeclarationTypeHints = true,
-                                includeInlayFunctionLikeReturnTypeHints = true,
-                                includeInlayEnumMemberValueHints = true,
-                            },
-                        },
-                    },
-                },
-                tailwindcss = {
-                    settings = {
-                        tailwindCSS = {
-                            includeLanguages = {},
-                            experimental = { classRegex = {} },
-                            lint = {
-                                cssConflict = 'warning',
-                                invalidApply = 'error',
-                                invalidScreen = 'error',
-                                invalidVariant = 'error',
-                                recommendedVariantOrder = 'warning',
-                            },
-                        },
-                    },
-                },
+                gopls = {},
+                pyright = {},
                 lua_ls = {
                     settings = {
                         Lua = {
@@ -207,9 +133,7 @@ return {
                         },
                     },
                 },
-                cssls = {},
                 terraformls = {},
-                dockerls = {},
             }
 
             local server_names = vim.tbl_keys(servers)
