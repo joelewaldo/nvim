@@ -137,7 +137,7 @@ return {
                 },
                 terraformls = {},
                 ts_ls = {},
-                clangd = {},
+                clangd = { "clangd", "--compile-commands-dir=build" },
             }
 
             local server_names = vim.tbl_keys(servers)
