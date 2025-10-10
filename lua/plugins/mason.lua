@@ -27,6 +27,8 @@ return {
                             'flake8',        -- Python linter
                             'tflint',        -- Terraform linter
                             'hadolint',      -- Dockerfile linter
+                            'prettier',
+                            'eslint_d'
                         },
                     }
                 end,
@@ -134,6 +136,8 @@ return {
                     },
                 },
                 terraformls = {},
+                ts_ls = {},
+                clangd = {},
             }
 
             local server_names = vim.tbl_keys(servers)
