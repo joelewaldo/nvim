@@ -20,14 +20,26 @@ return {
         priority = 1000,
     },
     {
-        'tiagovla/tokyodark.nvim',
+        'folke/tokyonight.nvim',
         priority = 1000,
+        lazy = false,
         opts = {
             transparent_background = false,
+            style = "night"
         },
-        config = function(_, opts)
-            require('tokyodark').setup(opts)
-            vim.cmd [[colorscheme tokyodark]]
-        end,
+        -- config = function()
+        --     vim.cmd[[colorscheme tokyonight]]
+        -- end,
     },
+    {
+      "navarasu/onedark.nvim",
+      priority = 1000, -- make sure to load this before all the other start plugins
+      config = function()
+        require('onedark').setup {
+          style = 'deep'
+        }
+        -- Enable theme
+        require('onedark').load()
+      end
+    }
 }
