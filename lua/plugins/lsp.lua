@@ -3,7 +3,7 @@ return {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     lazy = true,
-    event = 'VeryLazy',
+    event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
       -- INIT MASON
       { 'williamboman/mason.nvim', config = true },
@@ -50,7 +50,9 @@ return {
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
+          if client and client.name ~= 'kotlin_language_server'
+            and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
+          then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -133,6 +135,7 @@ return {
         cssls = {},
         tailwindcss = {},
         gopls = {},
+        kotlin_language_server = {},
 
         vtsls = {
           settings = {
@@ -172,15 +175,10 @@ return {
             },
           },
         },
-
-        eslint_d = {},
-        markdownlint = {},
-        stylua = {},
-        prettierd = {},
       }
 
       local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, { 'stylua' })
+      vim.list_extend(ensure_installed, { 'eslint_d', 'markdownlint', 'prettierd', 'stylua' })
 
       require('mason-lspconfig').setup { ensure_installer = false, automatic_enable = false }
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
